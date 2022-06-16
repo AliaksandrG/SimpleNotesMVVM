@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="80dp"
+    android:layout_marginTop="@dimen/small_margin_text_view"
+    android:background="@color/grey"
+    android:elevation="1dp">
+
+    <TextView
+        android:id="@+id/title_note_tv"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/small_margin_text_view"
+        android:maxLines="1"
+        android:paddingEnd="30dp"
+        android:textColor="@color/light_grey"
+        android:textSize="@dimen/text_title_size"
+        app:layout_constraintEnd_toStartOf="@+id/barrier"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:text="task test title" />
+
+
+    <TextView
+        android:id="@+id/description_note_tv"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/small_margin_text_view"
+        android:maxLines="1"
+        android:paddingEnd="30dp"
+        android:textColor="@color/light_grey"
+        android:textSize="@dimen/text_title_size"
+        app:layout_constraintEnd_toStartOf="@+id/barrier"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/title_note_tv"
+        tools:text="task test description" />
+
+    <androidx.constraintlayout.widget.Barrier
+        android:id="@+id/barrier"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:barrierDirection="start"
+        app:constraint_referenced_ids="priority_note_tv" />
+
+    <TextView
+        android:id="@+id/priority_note_tv"
+        android:layout_width="30dp"
+        android:layout_height="wrap_content"
+        android:textColor="@color/light_grey"
+        android:textSize="@dimen/text_title_size"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:text=" 5" />
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:text="@string/done_string"
+        android:textSize="40sp"
+        android:gravity="center"/>
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>

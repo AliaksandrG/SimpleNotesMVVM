@@ -1,0 +1,18 @@
+<resources>
+    <string name="app_name">SimpleNotesCleanArchitecture</string>
+    <string name="button_name_add_new_task">add new task</string>
+    <string name="done_string">DONE</string>
+    <string name="title_hint">Input your title</string>
+    <string name="description_hint">Input your description</string>
+    <string name="save_btn">save</string>
+    <string name="help_text_priority">choose the priority</string>
+    <string name="error_field">incorrect data</string>
+
+    <string-array name="priority_array">
+        <item>1</item>
+        <item>2</item>
+        <item>3</item>
+        <item>4</item>
+        <item>5</item>
+    </string-array>
+</resources>
