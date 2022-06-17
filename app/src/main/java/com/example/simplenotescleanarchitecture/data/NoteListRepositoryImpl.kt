@@ -13,13 +13,17 @@ object NoteListRepositoryImpl : NotesListRepository {
     private val notesList = sortedSetOf<NoteItem>({ o1, o2 -> o1.id.compareTo(o2.id) })
 
     private var autoIncrementId = 0
+    private val randomTitle =
+        listOf("rebuild the kitchen", "buy food", "apply for a visa")
+    private val randomDescription =
+        listOf("go to ...", "description test ${Random.nextInt(1000)}", "test text")
 
     init {
-        for (i in 0 until 10) {
+        for (i in 0 until 50) {
             val item = NoteItem(
-                title = "title $i",
-                description = i.toString(),
-                priority = 3,
+                title = randomTitle.random(),
+                description = randomDescription.random(),
+                priority = Random.nextInt(1, 5),
                 completed = Random.nextBoolean()
             )
             addNoteItem(item)
