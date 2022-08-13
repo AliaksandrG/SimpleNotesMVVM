@@ -1,18 +1,19 @@
 package com.example.simplenotescleanarchitecture.presentation
 
 
+import android.app.Application
+import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
 import com.example.simplenotescleanarchitecture.data.NoteListRepositoryImpl
 import com.example.simplenotescleanarchitecture.domain.AddNoteItemUseCase
 import com.example.simplenotescleanarchitecture.domain.EditNoteItemUseCase
 import com.example.simplenotescleanarchitecture.domain.GetNoteItemUseCase
 import com.example.simplenotescleanarchitecture.domain.NoteItem
-import java.lang.Exception
 
-class NoteItemViewModel : ViewModel() {
-    private val repository = NoteListRepositoryImpl
+class NoteItemViewModel(application: Application) : AndroidViewModel(application) {
+
+    private val repository = NoteListRepositoryImpl(application)
 
     private val getNoteItemUseCase = GetNoteItemUseCase(repository)
     private val addNoteItemUseCase = AddNoteItemUseCase(repository)
@@ -28,11 +29,11 @@ class NoteItemViewModel : ViewModel() {
 
     private val _closeScreen = MutableLiveData<Unit>()
     val closeScreen: LiveData<Unit>
-    get() = _closeScreen
+        get() = _closeScreen
 
     private val _noteItem = MutableLiveData<NoteItem>()
-    val noteItem:LiveData<NoteItem>
-    get() = _noteItem
+    val noteItem: LiveData<NoteItem>
+        get() = _noteItem
 
     fun getNoteItem(noteItemId: Int) {
         val item = getNoteItemUseCase.getNoteItem(noteItemId)

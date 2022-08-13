@@ -1,15 +1,16 @@
 package com.example.simplenotescleanarchitecture.presentation
 
-import androidx.lifecycle.ViewModel
+import android.app.Application
+import androidx.lifecycle.AndroidViewModel
 import com.example.simplenotescleanarchitecture.data.NoteListRepositoryImpl
 import com.example.simplenotescleanarchitecture.domain.DeleteNoteItemUseCase
 import com.example.simplenotescleanarchitecture.domain.EditNoteItemUseCase
 import com.example.simplenotescleanarchitecture.domain.GetNotesListUseCase
 import com.example.simplenotescleanarchitecture.domain.NoteItem
 
-class MainViewModel : ViewModel() {
+class MainViewModel(application: Application) : AndroidViewModel(application) {
 
-    private val repository = NoteListRepositoryImpl
+    private val repository = NoteListRepositoryImpl(application)
 
     private val getNotesListUseCase = GetNotesListUseCase(repository)
     private val deleteNoteItemUseCase = DeleteNoteItemUseCase(repository)

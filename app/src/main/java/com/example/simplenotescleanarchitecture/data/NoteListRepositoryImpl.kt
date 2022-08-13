@@ -1,64 +1,46 @@
 package com.example.simplenotescleanarchitecture.data
 
+import android.app.Application
 import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.Transformations
 import com.example.simplenotescleanarchitecture.domain.NoteItem
 import com.example.simplenotescleanarchitecture.domain.NotesListRepository
-import java.lang.RuntimeException
-import kotlin.random.Random
 
-object NoteListRepositoryImpl : NotesListRepository {
+class NoteListRepositoryImpl(application: Application) : NotesListRepository {
 
-    private val notesListLiveData = MutableLiveData<List<NoteItem>>()
-    private val notesList = sortedSetOf<NoteItem>({ o1, o2 -> o1.id.compareTo(o2.id) })
-
-    private var autoIncrementId = 0
-    private val randomTitle =
-        listOf("rebuild the kitchen", "buy food", "apply for a visa")
-    private val randomDescription =
-        listOf("go to ...", "description test ${Random.nextInt(1000)}", "test text")
-
-    init {
-        for (i in 0 until 50) {
-            val item = NoteItem(
-                title = randomTitle.random(),
-                description = randomDescription.random(),
-                priority = Random.nextInt(1, 5),
-                completed = Random.nextBoolean()
-            )
-            addNoteItem(item)
-        }
-    }
+    private val noteListDao = AppDatabase.getInstance(application).noteListDao()
+    private val mapper = NoteListMapper()
 
     override fun getNoteItem(noteItemId: Int): NoteItem {
-        return notesList.find { it.id == noteItemId }
-            ?: throw RuntimeException("element with $noteItemId not found")
+        val dbModel = noteListDao.getNoteList(noteItemId)
+        return mapper.mapDbModelToEntity(dbModel)
     }
 
     override fun addNoteItem(noteItem: NoteItem) {
-        if (noteItem.id == NoteItem.UNDEFINED_ID) {
-            noteItem.id = autoIncrementId++
-        }
-        notesList.add(noteItem)
-        updateList()
+        noteListDao.addNoteItem(mapper.mapEntityToDbModel(noteItem))
     }
 
     override fun deleteNoteItem(noteItem: NoteItem) {
-        notesList.remove(noteItem)
-        updateList()
+        noteListDao.deleteNoteItem(noteItem.id)
     }
 
     override fun editNoteItem(noteItem: NoteItem) {
-        val oldElement = getNoteItem(noteItem.id)
-        notesList.remove(oldElement)
-        addNoteItem(noteItem)
+        noteListDao.addNoteItem(mapper.mapEntityToDbModel(noteItem))
     }
+
+//    override fun getNotesList(): LiveData<List<NoteItem>> {
+//        return MediatorLiveData<List<NoteItem>>().apply {
+//            addSource(noteListDao.getNoteList()){
+//                if (it.size > 10) {
+//                    value = mapper.mapListDbModelToListEntity(it)
+//                }
+//            }
+//        }
+//    }
 
     override fun getNotesList(): LiveData<List<NoteItem>> {
-        return notesListLiveData
-    }
-
-    private fun updateList() {
-        notesListLiveData.value = notesList.toList()
+        return Transformations.map(noteListDao.getNoteList()) {
+            mapper.mapListDbModelToListEntity(it)
+        }
     }
 }
