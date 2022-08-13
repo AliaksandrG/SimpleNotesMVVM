@@ -8,11 +8,18 @@
     <string name="help_text_priority">choose the priority</string>
     <string name="error_field">incorrect data</string>
 
+    <string name="priority_low_low">LOW-LOW</string>
+    <string name="priority_low">LOW</string>
+    <string name="priority_medium">MEDIUM</string>
+    <string name="priority_high">HIGH</string>
+    <string name="priority_sos">SOS!!!</string>
+    <string name="priority_title">Priority:</string>
+
     <string-array name="priority_array">
-        <item>1</item>
-        <item>2</item>
-        <item>3</item>
-        <item>4</item>
-        <item>5</item>
+        <item>@string/priority_low_low</item>
+        <item>@string/priority_low</item>
+        <item>@string/priority_medium</item>
+        <item>@string/priority_high</item>
+        <item>@string/priority_sos</item>
     </string-array>
 </resources>

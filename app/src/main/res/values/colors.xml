@@ -9,4 +9,9 @@
     <color name="white">#FFFFFFFF</color>
     <color name="grey">#827D7D</color>
     <color name="light_grey">#E7E4E4</color>
+    <color name="default_red">#FF5722</color>
+    <color name="light_red">#FF7700</color>
+    <color name="default_orange">#FF9800</color>
+    <color name="light_green">#A4AE41</color>
+    <color name="default_green">#8BD535</color>
 </resources>

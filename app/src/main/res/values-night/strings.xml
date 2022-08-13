@@ -1,4 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="button_name_add_new_task">add new task</string>
+    <string name="priority_title">Priority:</string>
 </resources>

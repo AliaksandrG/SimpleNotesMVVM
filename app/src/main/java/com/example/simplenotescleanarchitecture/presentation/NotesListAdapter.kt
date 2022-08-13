@@ -1,9 +1,12 @@
 package com.example.simplenotescleanarchitecture.presentation
 
+import android.content.Context
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.ListAdapter
 import androidx.viewbinding.ViewBinding
+import com.example.simplenotescleanarchitecture.R
 import com.example.simplenotescleanarchitecture.databinding.ItemNoteDisabledBinding
 import com.example.simplenotescleanarchitecture.databinding.ItemNoteEnabledBinding
 import com.example.simplenotescleanarchitecture.domain.NoteItem
@@ -36,12 +39,16 @@ class NotesListAdapter : ListAdapter<NoteItem, NotesItemViewHolder>(
         when (binding) {
             is ItemNoteEnabledBinding -> {
                 binding.titleNoteTv.text = noteItem.title
-                binding.priorityNoteTv.text = noteItem.priority.toString()
+                binding.priorityNoteTv.apply {
+                    setTextColor(getColorPriority(viewHolder.itemView.context, noteItem.priority))
+                    text = setTextPriority(viewHolder.itemView.context, noteItem.priority)
+                }
                 binding.descriptionNoteTv.text = noteItem.description
             }
             is ItemNoteDisabledBinding -> {
                 binding.titleNoteTv.text = noteItem.title
-                binding.priorityNoteTv.text = noteItem.priority.toString()
+                binding.priorityNoteTv.text =
+                    setTextPriority(viewHolder.itemView.context, noteItem.priority)
                 binding.descriptionNoteTv.text = noteItem.description
             }
         }
@@ -65,6 +72,27 @@ class NotesListAdapter : ListAdapter<NoteItem, NotesItemViewHolder>(
         }
     }
 
+    private fun setTextPriority(context: Context, priorityId: Int): String {
+        return when (priorityId) {
+            1 -> context.getString(R.string.priority_low_low)
+            2 -> context.getString(R.string.priority_low)
+            3 -> context.getString(R.string.priority_medium)
+            4 -> context.getString(R.string.priority_high)
+            5 -> context.getString(R.string.priority_sos)
+            else -> context.getString(R.string.priority_low_low)
+        }
+    }
+
+    private fun getColorPriority(context: Context, priorityId: Int): Int {
+        return when (priorityId) {
+            1 -> ContextCompat.getColor(context, R.color.default_green)
+            2 -> ContextCompat.getColor(context, R.color.light_green)
+            3 -> ContextCompat.getColor(context, R.color.default_orange)
+            4 -> ContextCompat.getColor(context, R.color.light_red)
+            5 -> ContextCompat.getColor(context, R.color.default_red)
+            else -> ContextCompat.getColor(context, R.color.default_green)
+        }
+    }
 
     companion object {
         const val VIEW_TYPE_ENABLED = 100
