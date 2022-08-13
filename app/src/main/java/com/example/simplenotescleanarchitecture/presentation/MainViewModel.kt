@@ -2,11 +2,13 @@ package com.example.simplenotescleanarchitecture.presentation
 
 import android.app.Application
 import androidx.lifecycle.AndroidViewModel
+import androidx.lifecycle.viewModelScope
 import com.example.simplenotescleanarchitecture.data.NoteListRepositoryImpl
 import com.example.simplenotescleanarchitecture.domain.DeleteNoteItemUseCase
 import com.example.simplenotescleanarchitecture.domain.EditNoteItemUseCase
 import com.example.simplenotescleanarchitecture.domain.GetNotesListUseCase
 import com.example.simplenotescleanarchitecture.domain.NoteItem
+import kotlinx.coroutines.launch
 
 class MainViewModel(application: Application) : AndroidViewModel(application) {
 
@@ -19,11 +21,15 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
     val notesList = getNotesListUseCase.getNotesList()
 
     fun deleteNoteItem(noteItem: NoteItem) {
-        deleteNoteItemUseCase.deleteNoteItem(noteItem)
+        viewModelScope.launch {
+            deleteNoteItemUseCase.deleteNoteItem(noteItem)
+        }
     }
 
     fun changeCompleteState(noteItem: NoteItem) {
-        val newItem = noteItem.copy(completed = !noteItem.completed)
-        editNoteItemUseCase.editNoteItem(newItem)
+        viewModelScope.launch {
+            val newItem = noteItem.copy(completed = !noteItem.completed)
+            editNoteItemUseCase.editNoteItem(newItem)
+        }
     }
 }

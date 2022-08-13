@@ -5,11 +5,13 @@ import android.app.Application
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.viewModelScope
 import com.example.simplenotescleanarchitecture.data.NoteListRepositoryImpl
 import com.example.simplenotescleanarchitecture.domain.AddNoteItemUseCase
 import com.example.simplenotescleanarchitecture.domain.EditNoteItemUseCase
 import com.example.simplenotescleanarchitecture.domain.GetNoteItemUseCase
 import com.example.simplenotescleanarchitecture.domain.NoteItem
+import kotlinx.coroutines.launch
 
 class NoteItemViewModel(application: Application) : AndroidViewModel(application) {
 
@@ -36,8 +38,10 @@ class NoteItemViewModel(application: Application) : AndroidViewModel(application
         get() = _noteItem
 
     fun getNoteItem(noteItemId: Int) {
-        val item = getNoteItemUseCase.getNoteItem(noteItemId)
-        _noteItem.value = item
+        viewModelScope.launch {
+            val item = getNoteItemUseCase.getNoteItem(noteItemId)
+            _noteItem.value = item
+        }
     }
 
     fun addNewItem(inputTitle: String?, inputDescription: String?, inputPriority: String?) {
@@ -45,14 +49,16 @@ class NoteItemViewModel(application: Application) : AndroidViewModel(application
         val description = parseText(inputDescription)
         val isFieldsValid = validateInput(title, description, inputPriority!!.toInt())
         if (isFieldsValid) {
-            val noteItem = NoteItem(
-                title = title,
-                description = description,
-                priority = inputPriority.toInt(),
-                completed = false
-            )
-            addNoteItemUseCase.addNoteItem(noteItem)
-            finishScreen()
+            viewModelScope.launch {
+                val noteItem = NoteItem(
+                    title = title,
+                    description = description,
+                    priority = inputPriority.toInt(),
+                    completed = false
+                )
+                addNoteItemUseCase.addNoteItem(noteItem)
+                finishScreen()
+            }
         }
 
     }
@@ -62,15 +68,17 @@ class NoteItemViewModel(application: Application) : AndroidViewModel(application
         val description = parseText(inputDescription)
         val isFieldsValid = validateInput(title, description, inputPriority!!.toInt())
         if (isFieldsValid) {
-            _noteItem.value?.let {
-                val item = it.copy(
-                    title = title,
-                    description = description,
-                    priority = inputPriority.toInt(),
-                    completed = false
-                )
-                editNoteItemUseCase.editNoteItem(item)
-                finishScreen()
+            viewModelScope.launch {
+                _noteItem.value?.let {
+                    val item = it.copy(
+                        title = title,
+                        description = description,
+                        priority = inputPriority.toInt(),
+                        completed = false
+                    )
+                    editNoteItemUseCase.editNoteItem(item)
+                    finishScreen()
+                }
             }
         }
     }
