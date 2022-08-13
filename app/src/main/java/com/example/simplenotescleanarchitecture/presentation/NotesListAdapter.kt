@@ -3,7 +3,9 @@ package com.example.simplenotescleanarchitecture.presentation
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.ListAdapter
-import com.example.simplenotescleanarchitecture.R
+import androidx.viewbinding.ViewBinding
+import com.example.simplenotescleanarchitecture.databinding.ItemNoteDisabledBinding
+import com.example.simplenotescleanarchitecture.databinding.ItemNoteEnabledBinding
 import com.example.simplenotescleanarchitecture.domain.NoteItem
 
 
@@ -13,29 +15,42 @@ class NotesListAdapter : ListAdapter<NoteItem, NotesItemViewHolder>(
 
     var onNoteItemLongClickListener: ((NoteItem) -> Unit)? = null
     var onNoteItemClickListener: ((NoteItem) -> Unit)? = null
+    private lateinit var binding: ViewBinding
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): NotesItemViewHolder {
-        val layout = when (viewType) {
-            VIEW_TYPE_ENABLED -> R.layout.item_note_enabled
-            VIEW_TYPE_DISABLED -> R.layout.item_note_disabled
+        binding = when (viewType) {
+            VIEW_TYPE_ENABLED -> {
+                ItemNoteEnabledBinding.inflate(LayoutInflater.from(parent.context), parent, false)
+            }
+            VIEW_TYPE_DISABLED -> {
+                ItemNoteDisabledBinding.inflate(LayoutInflater.from(parent.context), parent, false)
+            }
             else -> throw RuntimeException("Unknown view type - $viewType")
         }
-        val view =
-            LayoutInflater.from(parent.context).inflate(layout, parent, false)
-        return NotesItemViewHolder(view)
+        return NotesItemViewHolder(binding)
     }
 
     override fun onBindViewHolder(viewHolder: NotesItemViewHolder, position: Int) {
         val noteItem = getItem(position)
-        viewHolder.tvTitle.text = noteItem.title
-        viewHolder.tvPriority.text = noteItem.priority.toString()
-        viewHolder.tvDescription.text = noteItem.description
+        val binding = viewHolder.binding
+        when (binding) {
+            is ItemNoteEnabledBinding -> {
+                binding.titleNoteTv.text = noteItem.title
+                binding.priorityNoteTv.text = noteItem.priority.toString()
+                binding.descriptionNoteTv.text = noteItem.description
+            }
+            is ItemNoteDisabledBinding -> {
+                binding.titleNoteTv.text = noteItem.title
+                binding.priorityNoteTv.text = noteItem.priority.toString()
+                binding.descriptionNoteTv.text = noteItem.description
+            }
+        }
 
-        viewHolder.view.setOnClickListener {
+        binding.root.setOnClickListener {
             onNoteItemClickListener?.invoke(noteItem)
         }
 
-        viewHolder.view.setOnLongClickListener {
+        binding.root.setOnLongClickListener {
             onNoteItemLongClickListener?.invoke(noteItem)
             true
         }
