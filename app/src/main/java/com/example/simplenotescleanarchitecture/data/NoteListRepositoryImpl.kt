@@ -39,7 +39,7 @@ class NoteListRepositoryImpl(application: Application) : NotesListRepository {
 //    }
 
     override fun getNotesList(): LiveData<List<NoteItem>> {
-        return Transformations.map(noteListDao.getNoteList()) {
+        return Transformations.map(noteListDao.getNotesList()) {
             mapper.mapListDbModelToListEntity(it)
         }
     }

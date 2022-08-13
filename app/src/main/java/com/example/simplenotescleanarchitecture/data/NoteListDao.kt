@@ -10,7 +10,7 @@ import androidx.room.Query
 interface NoteListDao {
 
     @Query("SELECT * FROM note_items")
-    fun getNoteList(): LiveData<List<NoteItemDmModel>>
+    fun getNotesList(): LiveData<List<NoteItemDmModel>>
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     fun addNoteItem(noteItemDmModel: NoteItemDmModel)
