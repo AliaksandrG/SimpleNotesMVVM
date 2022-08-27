@@ -3,9 +3,13 @@ package com.example.simplenotescleanarchitecture.presentation
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
+import android.widget.RelativeLayout
+import android.widget.TextView
+import androidx.appcompat.app.ActionBar
 import androidx.appcompat.app.AppCompatActivity
 import com.example.simplenotescleanarchitecture.R
 import com.example.simplenotescleanarchitecture.domain.NoteItem
+
 
 class NoteItemActivity : AppCompatActivity(), NoteItemFragment.OnEditingFinishedListener {
 
@@ -16,6 +20,22 @@ class NoteItemActivity : AppCompatActivity(), NoteItemFragment.OnEditingFinished
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_note_item)
         parseIntent()
+
+
+        val actionbar = supportActionBar
+        val textview = TextView(this)
+        val layoutparams = RelativeLayout.LayoutParams(
+            RelativeLayout.LayoutParams.MATCH_PARENT,
+            RelativeLayout.LayoutParams.WRAP_CONTENT
+        )
+
+        textview.layoutParams = layoutparams
+        textview.text = getString(R.string.priority_high)
+        textview.textSize = 18f
+        actionbar?.setDisplayOptions(ActionBar.DISPLAY_SHOW_CUSTOM);
+        actionbar?.setCustomView(textview);
+
+
         // if savedInstanceState == null -> activity isn't recreated
         if (savedInstanceState == null) {
             initCorrectMode()
